@@ -1,0 +1,27 @@
+<html>   
+    <script src="http://www.jsfuck.com/jsfuck.js"></script>
+    <script src="bundle.js"></script>
+    <script src="encoder.js"></script>
+    <script src="util.js"></script> 
+    <script src="rebuild.js"></script>
+
+    <body></body>
+    <script>
+        let hcode = 0;
+        let hflag = true;
+        let ucode = 0;
+        let uflag = true;
+        let jcode = 0;
+        let jflag = true;
+        let fuzzr = [true, false, false, false, false, false, false, false, false, false];
+        // 1 + 9 position for fuzzing. The first flag is for deleting the quotes wrapping attribute value
+        // <svg[1]onload[2]=[3]"[4]java[5]script[6]:[7]alert(1)"[8]</svg[9]
+
+        options = [hcode, hflag, ucode, uflag, jcode, jflag, fuzzr]
+
+        var v = "<img src=x onerror=\"alert(`1`)\"><a onfocus>";
+        var a = rebuildHtmlTokens(getHtmlAst(v), options);
+        console.log(a);
+        document.body.innerHTML = a;
+    </script>
+</html>
