@@ -1,7 +1,7 @@
 var FuzzArr1 = ["/", "/" + randomStr() + "/", "\u0009", "\u000a", "\u000c", "\u000d", "\u0020", "\u002f"];
 var FuzzArr23 = ["\u0009", "\u000a", "\u000c", "\u000d", "\u0020"];
 var FuzzArr4 = ["\u0001", "\u0002", "\u0003", "\u0004", "\u0005", "\u0004", "\u0005", "\u0006", "\u0007", "\u0008", "\u0009", "\u000a", "\u000b", "\u000c", "\u000d", "\u000e", "\u000f", "\u0010", "\u0011", "\u0012", "\u0013", "\u0014", "\u0015", "\u0016", "\u0017", "\u0018", "\u0019", "\u001a", "\u001b", "\u001c", "\u001d", "\u001e", "\u001f", "\u0020"];
-var FuzzArr56 = ["\u0009", "\u000a", "\u000d"]
+var FuzzArr56 = ["\u0009", "\u000a", "\u000d", "\u0061"];
 var FuzzArr7 = ["~", "\u0009", "\u000a", "\u000b", "\u000c", "\u000d", "\u0020",  "\u0021", "\u002b", "\u002d", "\u003b", "\u007e", "\u003b", "\u00a0", "\u1680", "\u2000", "\u2001", "\u2002", "\u2003", "\u2004", "\u2005", "\u2006", "\u2007", "\u2008", "\u2009", "\u200a", "\u2028", "\u2029", "\u202f", "\u205f", "\u3000", "\ufeff"]
 var FuzzArr8 = ["", ">", "/", ";", "\u0009", "\u000a", "\u000b", "\u0020"];
 var FuzzArr9 = ["", ">", "/", ";", "\u0009", "\u000a", "\u000b", "\u000d", "\u0020"];
@@ -120,7 +120,7 @@ function rebuildHtmlTokens(token, options = null) {
 function rebuildJsTokens(v, jcode, jflag) {
     let rToken = "";
     let length = 0;
-    let tokens = getJsAst(v);
+    let tokens = getJsTokens(v);
     for(var i = 0; i < tokens.length; i++) {
         // Process space character
         if (tokens[i].range[0] != length) {

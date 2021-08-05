@@ -1,5 +1,7 @@
 // Usage: browserify main.js -o bundle.js
 
+// Open only some of the functions from the required package to public to keep secure. (Some seldom used functions may be vulnerable if out-of-dated)
+
 // https://astexplorer.net/
 
 // HTML AST
@@ -16,8 +18,21 @@ global.getHtmlAst = function(html) {
 // https://github.com/jquery/esprima
 let esprima = require('esprima');
 
-global.getJsAst = function(js) {
+global.getJsTokens = function(js) {
     let jsTokens = esprima.tokenize(js, { range: true });
-    // let jsAst = esprima.parseScript(js);
     return jsTokens;
 }
+
+global.getJsAst = function(js) {
+    let jsAst = esprima.parseScript(js);
+    return jsAst;
+}
+
+// // https://npmdoc.github.io/node-npmdoc-ast-types/build/apidoc.html
+// // https://github.com/benjamn/ast-types
+// let astTypes = require('ast-types');
+
+// global.getAstTypes = function() {
+//     // Make all functions to public
+//     return astTypes;
+// }
