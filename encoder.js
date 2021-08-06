@@ -1,37 +1,61 @@
+var htmlMap = {1: noEncode, 2: html10Encode, 3: html16Encode};
+var urlMap = {1: noEncode, 2: wholeurlEncode};
+var jsMap = {1: noEncode, 2: js8Encode, 3:js16Encode, 4: jsunicodeEncode, 5: jsfuckEncode};
+var cssMap = {1: noEncode, 2: css16Encode};
+
 function htmlEncoder(v, code, flag) {
     // Since htmlEncoded char will be decoded at first, so some of the appended character like a digit will be considered as part the previous encoded character. Then browser will parse the payload to an expected string. This issue will only occured when the last ";" which is like a border character is ignored when encoding with variant model.
     let res = "";
     let previous = 0;   // set 1 when using variant html10Encode or variant html16Encode without ";"
     for (var i = 0; i < v.length; i++) {
-        switch(code) {
-            case 0:
-                let fn = randomElem([html10Encode, html16Encode, noEncode]);
-                if (fn == noEncode) {
-                    if (previous === 1) {
-                        res += ";";
-                    }
-                    res += fn(v[i], previous)
-                    previous = 0;
-                }
-                else {
-                    cValue = fn(v[i], flag);
-                    if (cValue.slice(-1) != ";") {
-                        previous = 1;
-                    }
-                    else if (cValue.slice(-1) === ";" && previous === 1) {
-                        previous = 0;
-                    }
-                    res += cValue;
-                }
-                break;
-            case 1:
-                res += html10Encode(v[i], flag);
-                break;
-            case 2:
-                res += html16Encode(v[i], flag);
-                break;
-            default:
-                res += noEncode(v[i]);
+        // switch(code) {
+        //     case 1:
+        //         res += noEncode(v[i]);
+        //         break;
+        //     case 2:
+        //         res += html10Encode(v[i], flag);
+        //         break;
+        //     case 3:
+        //         res += html16Encode(v[i], flag);
+        //         break;
+        //     default:
+        //         let fn = randomElem([html10Encode, html16Encode, noEncode]);
+        //         if (fn == noEncode) {
+        //             if (previous === 1) {
+        //                 res += ";";
+        //             }
+        //             res += fn(v[i], previous)
+        //             previous = 0;
+        //         }
+        //         else {
+        //             cValue = fn(v[i], flag);
+        //             if (cValue.slice(-1) != ";") {
+        //                 previous = 1;
+        //             }
+        //             else if (cValue.slice(-1) === ";" && previous === 1) {
+        //                 previous = 0;
+        //             }
+        //             res += cValue;
+        //         }
+        //         break;
+        // }
+        let fn = htmlMap[code.length == 0?1:code[randomNum(0, code.length - 1)]];
+        if (fn == noEncode) {
+            if (previous === 1) {
+                res += ";";
+            }
+            res += fn(v[i], previous)
+            previous = 0;
+        }
+        else {
+            cValue = fn(v[i], flag);
+            if (cValue.slice(-1) != ";") {
+                previous = 1;
+            }
+            else if (cValue.slice(-1) === ";" && previous === 1) {
+                previous = 0;
+            }
+            res += cValue;
         }
     }
     return res;
@@ -41,30 +65,33 @@ function jsEncoder(v, code, flag) {
     let res = "";
     let fn;
     for (var i = 0; i < v.length; i++) {
-        switch(code) {
-            case 0:
-                fn = randomElem([js8Encode, js16Encode, jsunicodeEncode, jsfuckEncode, noEncode]);
-                res += fn(v[i], flag);
-                break;
-            case "identifier":
-                fn = randomElem([jsunicodeEncode, noEncode]);
-                res += fn(v[i], flag);
-                break;
-            case 1:
-                res += js8Encode(v[i], flag);
-                break;
-            case 2:
-                res += js16Encode(v[i], flag);
-                break;
-            case 3:
-                res += jsunicodeEncode(v[i], flag);
-                break;
-            case 4:
-                res += jsfuckEncode(v[i], flag);
-                break;
-            default:
-                res += noEncode(v[i]);
-        }
+        // switch(code) {
+        //     case 1:
+        //         res += noEncode(v[i]);
+        //         break;
+        //     case 2:
+        //         res += js8Encode(v[i], flag);
+        //         break;
+        //     case 3:
+        //         res += js16Encode(v[i], flag);
+        //         break;
+        //     case 4:
+        //         res += jsunicodeEncode(v[i], flag);
+        //         break;
+        //     case 5:
+        //         res += jsfuckEncode(v[i], flag);
+        //         break;
+        //     case "identifier":
+        //         fn = randomElem([jsunicodeEncode, noEncode]);
+        //         res += fn(v[i], flag);
+        //         break;
+        //     default:
+        //         fn = randomElem([js8Encode, js16Encode, jsunicodeEncode, jsfuckEncode, noEncode]);
+        //         res += fn(v[i], flag);
+        //         break;
+        // }
+        fn = jsMap[code.length == 0?1:code[randomNum(0, code.length - 1)]];
+        res += fn(v[i], flag);
     }
 
     if (fn == jsfuckEncode || code == 4) {
@@ -78,17 +105,20 @@ function jsEncoder(v, code, flag) {
 function urlcomponentEncoder(v, code, flag) {
     let res = "";
     for (var i = 0; i < v.length; i++) {
-        switch(code) {
-            case 0:
-                fn = randomElem([wholeurlEncode, noEncode]);
-                res += fn(v[i], flag);
-                break;
-            case 1:
-                res += wholeurlEncode(v[i], flag);
-                break;
-            default:
-                res += noEncode(v[i]);
-        }
+        // switch(code) {
+        //     case 1:
+        //         res += noEncode(v[i]);
+        //         break;
+        //     case 2:
+        //         res += wholeurlEncode(v[i], flag);
+        //         break;
+        //     default:
+        //         fn = randomElem([wholeurlEncode, noEncode]);
+        //         res += fn(v[i], flag);
+        //         break;
+        // }
+        fn = urlMap[code.length == 0?1:code[randomNum(0, code.length - 1)]];
+        res += fn(v[i], flag);
     }
     return res;
 }
@@ -96,17 +126,20 @@ function urlcomponentEncoder(v, code, flag) {
 function cssEncoder(v, code, flag) {
     let res = "";
     for (var i = 0; i < v.length; i++) {
-        switch(code) {
-            case 0:
-                fn = randomElem([css16Encode, noEncode]);
-                res += fn(v[i], flag);
-                break;
-            case 1:
-                res += css16Encode(v[i], flag);
-                break;
-            default:
-                res += noEncode(v[i]);
-        }
+        // switch(code) {
+        //     case 1:
+        //         res += noEncode(v[i]);
+        //         break;
+        //     case 2:
+        //         res += css16Encode(v[i], flag);
+        //         break;
+        //     default:
+        //         fn = randomElem([css16Encode, noEncode]);
+        //         res += fn(v[i], flag);
+        //         break;
+        // }
+        fn = cssMap[code.length == 0?1:code[randomNum(0, code.length - 1)]];
+        res += fn(v[i], flag);
     }
     return res;
 }

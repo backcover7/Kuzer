@@ -10,14 +10,18 @@ function rebuildHtmlTokens(token, options = null) {
     /*
     options = [hcode, hflag, ucode, uflag, jcode, jflag]
 
-    hcode: {0: mixed, 1: html10Encode, 2: html16Encode, others: noEncode}
-    ucode: {0: mixed, 1: urlencode, others: noEncode}
-    jcode: {0: mixed, 1: js8Encode, 2:js16Encode, 3, jsunicodeEncode, 4: jsfuckEncode, others: noEncode}
-    ccode: (has not been supported yet) {0: mixed, 1: css16Encode, others: noEncode}
+    hcode: {1: noEncode, 2: html10Encode, 3: html16Encode, others: mixed}
+    ucode: {1: noEncode, 2: urlencode, others: mixed}
+    jcode: {1: noEncode, 2: js8Encode, 3: js16Encode, 4: jsunicodeEncode, 5: jsfuckEncode, others: mixed}
+    ccode: (has not been supported yet) {1: noEncode, 2: css16Encode, others: mixed}
     
-    *flag: {true: variant payload, false: normal encoding}
+    hcode: [1, 2, 3]
+    ucode: [1, 2]
+    jcode: [1, 2, 3, 4, 5]
+    ccode: [1, 2]
 
-    fuzzr: {true: fuzz!, false: noFuzz!}
+    *flag: [true: variant payload, false: normal encoding]
+    fuzzr: [true: fuzz!, false: noFuzz!]
 
     e.g. options = [0, true, null, false, 4, true, false]
     e.g. options = [0, true, 0, true, 0, true, true]  // Hardest encoding
@@ -130,8 +134,8 @@ function rebuildJsTokens(v, jcode, jflag) {
 
         let tokenValue = tokens[i].value;
         if (tokens[i].type == "Identifier") {
-            if (jcode != 3) {
-                jcode = "identifier";
+            if (jcode.length > 1) {
+                jcode = [getMapKeyByValue(jsMap, noEncode), getMapKeyByValue(jsMap, jsunicodeEncode)];
             }
             tokenValue = jsEncoder(tokenValue, jcode, jflag);      // unicode
         }

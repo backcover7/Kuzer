@@ -53,6 +53,38 @@ function variant(flag, payload, str="") {
     }
 }
 
+function getMapKeyByValue(object, value) {
+    return Object.keys(object).find(key => object[key] === value);
+}
+
+function getById(id) {
+    return document.getElementById(id);
+}
+
+function getSelectedValue(ids, type = null) {
+    let arr = [];
+    for (var i = 0; i < ids.length; i++) {
+        var m = document.getElementById(ids[i]);
+        var b = m.parentElement;
+        var c = m.parentNode;
+        if (document.getElementById(ids[i]).parentNode != null) {
+            let clsname = document.getElementById(ids[i]).parentNode.className;
+            if (clsname == "is-selected") {
+                if (type == "fuzzr") {
+                    arr.push(true);
+                }
+                else {
+                    arr.push(parseInt(ids[i].slice(-1)));
+                }
+            }
+            else if (type == "fuzzr") {
+                arr.push(false);
+            }
+        }
+    }
+    return arr;
+}
+
 function isUrl(v) {
     let pattern = new RegExp("^.*[\/|:]");
     return pattern.test(v);

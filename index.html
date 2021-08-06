@@ -1,27 +1,202 @@
-<html>   
+<html>
     <script src="http://www.jsfuck.com/jsfuck.js"></script>
     <script src="bundle.js"></script>
     <script src="encoder.js"></script>
     <script src="util.js"></script> 
     <script src="rebuild.js"></script>
 
-    <body></body>
+    <head>
+        <!-- <link href="base.css" rel="stylesheet"> -->
+
+        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+        <link rel="stylesheet" href="./mdl/material.min.css">
+        <script src="./mdl/material.min.js"></script>
+    </head>
+    <body style="background-color:rgb(255, 255, 255);">
+        <!-- https://getmdl.io/components/index.html -->
+        <div style="margin-left:50px;margin-top:30px;">
+            <div class="mdl-textfield mdl-js-textfield" style="width:50em">
+                <input id="payload" class="mdl-textfield__input" type="text">
+                <label class="mdl-textfield__label" for="payload">Enter XSS payload</label>
+            </div>
+
+            <div>
+                <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="varianthtml" style="float:left;width:250px;">
+                    <input type="checkbox" id="varianthtml" class="mdl-switch__input" checked>
+                    <span class="mdl-switch__label">Variant HTML Encoder</span>
+                </label>
+                  
+                <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="variantjs" style="float:left;width:250px;">
+                    <input type="checkbox" id="variantjs" class="mdl-switch__input" checked>
+                    <span class="mdl-switch__label">Variant JS Encoder</span>
+                </label>
+                  
+                <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" onclick="encode()" style="width:130px;height:30px;font-size:medium;float:left;">Encode</button>
+            </div>
+
+            <div style="margin-top:30px;">
+                <!-- <div class="mdl-textfield mdl-js-textfield" style="width:65em;">
+                    <textarea class="mdl-textfield__input" type="text" rows="2" id="output" readonly="readonly"></textarea>
+                </div> -->
+                <div class="mdl-textfield mdl-js-textfield" style="width:50em">
+                    <input id="output" class="mdl-textfield__input" type="text" readonly="readonly">
+                </div>
+                <div>
+                    <img src="fuzzingPosition.png">
+                </div>
+            </div>
+            
+            <div style="margin-top:20px;">
+                <div style="width:250px; float:left">
+                    <table class="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp">
+                        <thead>
+                        <tr>
+                            <th class="mdl-data-table__cell--non-numeric">HTML Encoders</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td id="html1" class="mdl-data-table__cell--non-numeric">None</td>
+                            </tr>
+                            <tr>
+                                <td id="html2" class="mdl-data-table__cell--non-numeric">HTML10</td>
+                            </tr>
+                            <tr>
+                                <td id="html3" class="mdl-data-table__cell--non-numeric">HTML16</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div style="width:280px; float:left">
+                    <table class="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp">
+                        <thead>
+                        <tr>
+                            <th class="mdl-data-table__cell--non-numeric">JavaScript Encoders</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td id="js1" class="mdl-data-table__cell--non-numeric">None</td>
+                        </tr>
+                        <tr>
+                            <td id="js2" class="mdl-data-table__cell--non-numeric">JS8</td>
+                        </tr>
+                        <tr>
+                            <td id="js3" class="mdl-data-table__cell--non-numeric">JS16</td>
+                        </tr>
+                        <tr>
+                            <td id="js4" class="mdl-data-table__cell--non-numeric">JS Unicode</td>
+                        </tr>
+                        <tr>
+                            <td id="js5" class="mdl-data-table__cell--non-numeric">JS Fuck</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div style="width:250px; float:left">
+                    <table class="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp">
+                        <thead>
+                        <tr>
+                            <th class="mdl-data-table__cell--non-numeric">URL Encoders</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td id="url1" class="mdl-data-table__cell--non-numeric">None</td>
+                        </tr>
+                        <tr>
+                            <td id="url2" class="mdl-data-table__cell--non-numeric">URL Encode</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div>
+                    <table class="mdl-data-table mdl-js-data-table mdl-data-table--selectable mdl-shadow--2dp">
+                        <thead>
+                        <tr>
+                            <th id="fuzzers" class="mdl-data-table__cell--non-numeric">Fuzzers</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td id="f0" class="mdl-data-table__cell--non-numeric">Quotes Wrappers</td>
+                        </tr>
+                        <tr>
+                            <td id="f1" class="mdl-data-table__cell--non-numeric">Position [1]</td>
+                        </tr>
+                        <tr>
+                            <td id="f2" class="mdl-data-table__cell--non-numeric">Position [2]</td>
+                        </tr>
+                        <tr>
+                            <td id="f3" class="mdl-data-table__cell--non-numeric">Position [3]</td>
+                        </tr>
+                        <tr>
+                            <td id="f4" class="mdl-data-table__cell--non-numeric">Position [4]</td>
+                        </tr>
+                        <tr>
+                            <td id="f5" class="mdl-data-table__cell--non-numeric">Position [5]</td>
+                        </tr>
+                        <tr>
+                            <td id="f6" class="mdl-data-table__cell--non-numeric">Position [6]</td>
+                        </tr>
+                        <tr>
+                            <td id="f7" class="mdl-data-table__cell--non-numeric">Position [7]</td>
+                        </tr>
+                        <tr>
+                            <td id="f8" class="mdl-data-table__cell--non-numeric">Position [8]</td>
+                        </tr>
+                        <tr>
+                            <td id="f9" class="mdl-data-table__cell--non-numeric">Position [9]</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </body>
     <script>
-        let hcode = 0;
-        let hflag = true;
-        let ucode = 0;
-        let uflag = true;
-        let jcode = 0;
-        let jflag = true;
-        let fuzzr = [true, false, false, false, false, false, false, false, false, false];
+        // let htmlMap = {1: noEncode, 2: html10Encode, 3: html16Encode};
+        // let urlMap = {1: noEncode, 2: wholeurlEncode};
+        // let jsMap = {1: noEncode, 2: js8Encode, 3:js16Encode, 4: jsunicodeEncode, 5: jsfuckEncode};
+        // let cssMap = {1: noEncode, 2: css16Encode};
+        // let hcode = [1, 2, 3];
+        // let hflag = true;
+        // let ucode = [1, 2];
+        // let uflag = true;
+        // let jcode = [1, 2, 3, 4, 5];
+        // let jflag = true;
+        // let fuzzr = [true, false, false, false, false, false, false, false, false, false];
         // 1 + 9 position for fuzzing. The first flag is for deleting the quotes wrapping attribute value
         // <svg[1]onload[2]=[3]"[4]java[5]script[6]:[7]alert(1)"[8]</svg[9]
 
-        options = [hcode, hflag, ucode, uflag, jcode, jflag, fuzzr]
+        // flag = ["hflag", "uflag", "jflag", fuzzr]
+        // options = [hcode, hflag, ucode, uflag, jcode, jflag, fuzzr]
 
-        var v = "<img src=x onerror=\"alert(`1`)\"><a onfocus>";
-        var a = rebuildHtmlTokens(getHtmlAst(v), options);
-        console.log(a);
-        document.body.innerHTML = a;
+        // var v = "<img src=x onerror=alert('1')>";
+        // var a = rebuildHtmlTokens(getHtmlAst(v), options);
+        // console.log(a);
+        // document.body.innerHTML = a;
+
+        // <img src=x onerror="alert(`1`)"><a onfocus>
+        function encode() {
+            var payload = getById("payload").value;
+            var newPayload = rebuildHtmlTokens(getHtmlAst(payload), getOptions());
+            getById("output").value = newPayload;
+        }
+
+        function getOptions() {
+            let options = [];
+            options[0] = getSelectedValue(["html1", "html2", "html3"]);
+            options[1] = getById("varianthtml").checked;
+            options[2] = getSelectedValue(["url1", "url2"]);
+            options[3] = false;  // url encode does not have variant version at present
+            options[4] = getSelectedValue(["js1", "js2", "js3", "js4", "js5"]);
+            options[5] = getById("variantjs").checked;
+            options[6] = getSelectedValue(["f0", "f1", "f2", "f3", "f4", "f5", "f6", "f7", "f8", "f9"], "fuzzr");
+            return options;
+        }
     </script>
 </html>
