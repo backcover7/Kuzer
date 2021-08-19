@@ -8,37 +8,6 @@ function htmlEncoder(v, code, flag) {
     let res = "";
     let previous = 0;   // set 1 when using variant html10Encode or variant html16Encode without ";"
     for (var i = 0; i < v.length; i++) {
-        // switch(code) {
-        //     case 1:
-        //         res += noEncode(v[i]);
-        //         break;
-        //     case 2:
-        //         res += html10Encode(v[i], flag);
-        //         break;
-        //     case 3:
-        //         res += html16Encode(v[i], flag);
-        //         break;
-        //     default:
-        //         let fn = randomElem([html10Encode, html16Encode, noEncode]);
-        //         if (fn == noEncode) {
-        //             if (previous === 1) {
-        //                 res += ";";
-        //             }
-        //             res += fn(v[i], previous)
-        //             previous = 0;
-        //         }
-        //         else {
-        //             cValue = fn(v[i], flag);
-        //             if (cValue.slice(-1) != ";") {
-        //                 previous = 1;
-        //             }
-        //             else if (cValue.slice(-1) === ";" && previous === 1) {
-        //                 previous = 0;
-        //             }
-        //             res += cValue;
-        //         }
-        //         break;
-        // }
         let fn = htmlMap[code.length == 0?1:code[randomNum(0, code.length - 1)]];
         if (fn == noEncode) {
             if (previous === 1) {
@@ -65,31 +34,6 @@ function jsEncoder(v, code, flag) {
     let res = "";
     let fn;
     for (var i = 0; i < v.length; i++) {
-        // switch(code) {
-        //     case 1:
-        //         res += noEncode(v[i]);
-        //         break;
-        //     case 2:
-        //         res += js8Encode(v[i], flag);
-        //         break;
-        //     case 3:
-        //         res += js16Encode(v[i], flag);
-        //         break;
-        //     case 4:
-        //         res += jsunicodeEncode(v[i], flag);
-        //         break;
-        //     case 5:
-        //         res += jsfuckEncode(v[i], flag);
-        //         break;
-        //     case "identifier":
-        //         fn = randomElem([jsunicodeEncode, noEncode]);
-        //         res += fn(v[i], flag);
-        //         break;
-        //     default:
-        //         fn = randomElem([js8Encode, js16Encode, jsunicodeEncode, jsfuckEncode, noEncode]);
-        //         res += fn(v[i], flag);
-        //         break;
-        // }
         fn = jsMap[code.length == 0?1:code[randomNum(0, code.length - 1)]];
         res += fn(v[i], flag);
     }
@@ -105,18 +49,6 @@ function jsEncoder(v, code, flag) {
 function urlcomponentEncoder(v, code, flag) {
     let res = "";
     for (var i = 0; i < v.length; i++) {
-        // switch(code) {
-        //     case 1:
-        //         res += noEncode(v[i]);
-        //         break;
-        //     case 2:
-        //         res += wholeurlEncode(v[i], flag);
-        //         break;
-        //     default:
-        //         fn = randomElem([wholeurlEncode, noEncode]);
-        //         res += fn(v[i], flag);
-        //         break;
-        // }
         fn = urlMap[code.length == 0?1:code[randomNum(0, code.length - 1)]];
         res += fn(v[i], flag);
     }
@@ -126,18 +58,6 @@ function urlcomponentEncoder(v, code, flag) {
 function cssEncoder(v, code, flag) {
     let res = "";
     for (var i = 0; i < v.length; i++) {
-        // switch(code) {
-        //     case 1:
-        //         res += noEncode(v[i]);
-        //         break;
-        //     case 2:
-        //         res += css16Encode(v[i], flag);
-        //         break;
-        //     default:
-        //         fn = randomElem([css16Encode, noEncode]);
-        //         res += fn(v[i], flag);
-        //         break;
-        // }
         fn = cssMap[code.length == 0?1:code[randomNum(0, code.length - 1)]];
         res += fn(v[i], flag);
     }
