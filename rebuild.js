@@ -100,27 +100,6 @@ function rebuildHtmlTokens(token, options = null) {
                 rToken += rawValue;
             }
         }
-        // else if (["script", "style"].includes(token.nodeType)) {
-        //     // raw text element
-        //     let rawValue = "";
-        //     if (token.nodeType == "script") {
-        //         rawValue = rebuildJsTokens(token.content.value.content, jcode, jflag);
-        //     }
-        //     else {
-        //         // rawValue = cssEncoder(token.content.value.content)
-        //     }
-
-        //     if (isParentTokenType(token, "svg")) {       // math?
-        //         rawValue = htmlEncoder(rawValue, hcode, hflag);
-        //     }
-
-        //     rToken += token.content.openStart.content;
-        //     rToken += token.content.openEnd.content.slice(0, -1) + variant(fuzzr[8], randomElem(FuzzArr8), ">");   // [8]
-        //     rToken += rawValue;
-        // }
-        // else {
-            // Doctype, Comment has not been supported yet since it is rare in XSS payloads
-        // }
         
         // Children
         if (token.content.children != null) {
