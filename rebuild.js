@@ -42,7 +42,7 @@ function rebuildHtmlTokens(token, options = null) {
     }
     else {
         // Open Tag and Attributes
-        if (token.nodeType == "tag") {
+        if (["tag", "script", "style"].includes(token.nodeType)) {
             rToken += token.content.openStart.content;
 
             let attrs = token.content.attributes;
@@ -80,28 +80,47 @@ function rebuildHtmlTokens(token, options = null) {
             if (token.content.openEnd != null) {
                 rToken += token.content.openEnd.content.slice(0, -1) + variant(fuzzr[8], randomElem(FuzzArr8), ">");  // [8]
             }
-        }
-        else if (["script", "style"].includes(token.nodeType)) {
-            // raw text element
-            let rawValue = "";
-            if (token.nodeType == "script") {
-                rawValue = rebuildJsTokens(token.content.value.content, jcode, jflag);
-            }
-            else {
-                // rawValue = cssEncoder(token.content.value.content)
-            }
 
-            if (isParentTokenType(token, "svg")) {       // math?
-                rawValue = htmlEncoder(rawValue, hcode, hflag);
+            if (["script", "style"].includes(token.nodeType)) {
+                // raw text element
+                let rawValue = "";
+                if (token.nodeType == "script") {
+                    rawValue = rebuildJsTokens(token.content.value.content, jcode, jflag);
+                }
+                else {
+                    // rawValue = cssEncoder(token.content.value.content)
+                }
+    
+                if (isParentTokenType(token, "svg")) {       // math?
+                    rawValue = htmlEncoder(rawValue, hcode, hflag);
+                }
+    
+                // rToken += token.content.openStart.content;
+                // rToken += token.content.openEnd.content.slice(0, -1) + variant(fuzzr[8], randomElem(FuzzArr8), ">");   // [8]
+                rToken += rawValue;
             }
-
-            rToken += token.content.openStart.content;
-            rToken += token.content.openEnd.content.slice(0, -1) + variant(fuzzr[8], randomElem(FuzzArr8), ">");   // [8]
-            rToken += rawValue;
         }
-        else {
+        // else if (["script", "style"].includes(token.nodeType)) {
+        //     // raw text element
+        //     let rawValue = "";
+        //     if (token.nodeType == "script") {
+        //         rawValue = rebuildJsTokens(token.content.value.content, jcode, jflag);
+        //     }
+        //     else {
+        //         // rawValue = cssEncoder(token.content.value.content)
+        //     }
+
+        //     if (isParentTokenType(token, "svg")) {       // math?
+        //         rawValue = htmlEncoder(rawValue, hcode, hflag);
+        //     }
+
+        //     rToken += token.content.openStart.content;
+        //     rToken += token.content.openEnd.content.slice(0, -1) + variant(fuzzr[8], randomElem(FuzzArr8), ">");   // [8]
+        //     rToken += rawValue;
+        // }
+        // else {
             // Doctype, Comment has not been supported yet since it is rare in XSS payloads
-        }
+        // }
         
         // Children
         if (token.content.children != null) {
@@ -134,10 +153,10 @@ function rebuildJsTokens(v, jcode, jflag) {
 
         let tokenValue = tokens[i].value;
         if (tokens[i].type == "Identifier") {
-            if (jcode.length > 1) {
-                jcode = [getMapKeyByValue(jsMap, noEncode), getMapKeyByValue(jsMap, jsunicodeEncode)];
+            if (jcode.includes(4)) {
+                idJcode = [getMapKeyByValue(jsMap, noEncode), getMapKeyByValue(jsMap, jsunicodeEncode)];
+                tokenValue = jsEncoder(tokenValue, idJcode, jflag);      // unicode
             }
-            tokenValue = jsEncoder(tokenValue, jcode, jflag);      // unicode
         }
         else if (tokens[i].type == "String") {
             tokenValue= tokenValue.slice(0,1) + jsEncoder(tokenValue.slice(1,-1), jcode, jflag) + tokenValue.slice(-1);
