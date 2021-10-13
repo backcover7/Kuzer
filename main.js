@@ -23,10 +23,10 @@ global.getJsTokens = function(js) {
     return jsTokens;
 }
 
-global.getJsAst = function(js) {
-    let jsAst = esprima.parseScript(js);
-    return jsAst;
-}
+// global.getJsAst = function(js) {
+//     let jsAst = esprima.parseScript(js);
+//     return jsAst;
+// }
 
 // // https://npmdoc.github.io/node-npmdoc-ast-types/build/apidoc.html
 // // https://github.com/benjamn/ast-types
