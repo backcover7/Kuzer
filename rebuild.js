@@ -62,8 +62,8 @@ function rebuildHtmlTokens(token, options = null) {
                             if (isUrl(attrValue)) {
                                 let urlArray = urlParse(attrValue);
                                 if (urlArray[0].toLowerCase() == "javascript:") {
-                                    urlArray[0] = insertFuzzer("javascript", variant(fuzzr[5], randomElem(FuzzArr5), ""));           // [5]
-                                    urlArray[0] += variant(fuzzr[6], randomElem(FuzzArr6), "") + ":" + variant(fuzzr[7], randomElem(FuzzArr7), "");    // [6], [7]
+                                    urlArray[0] = insertFuzzer("javascript", variant(fuzzr[5], randomElem(FuzzArr56), ""));           // [5]
+                                    urlArray[0] += variant(fuzzr[6], randomElem(FuzzArr56), "") + ":" + variant(fuzzr[7], randomElem(FuzzArr7), "");    // [6], [7]
                                     urlArray[1] = rebuildJsTokens(urlArray[1], jcode, jflag);
                                 }
                                 attrValue = urlArray[0] + urlcomponentEncoder(urlArray[1], ucode, uflag);
