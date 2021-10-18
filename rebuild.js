@@ -67,6 +67,8 @@ function rebuildHtmlTokens(token, options = null) {
                                     urlArray[1] = rebuildJsTokens(urlArray[1], jcode, jflag);
                                 }
                                 attrValue = urlArray[0] + urlcomponentEncoder(urlArray[1], ucode, uflag);
+                            } else if (["src", "href"].includes(attrs[i].key.content)) {
+                                attrValue = urlcomponentEncoder(attrValue, ucode, uflag)
                             }
                         }
                         rToken +=  "=" + variant(fuzzr[3], randomElem(FuzzArr23), "");  // [3]
@@ -85,7 +87,9 @@ function rebuildHtmlTokens(token, options = null) {
                 // raw text element
                 let rawValue = "";
                 if (token.nodeType == "script") {
-                    rawValue = rebuildJsTokens(token.content.value.content, jcode, jflag);
+                    if (token.content.value != null) {
+                        rawValue = rebuildJsTokens(token.content.value.content, jcode, jflag);
+                    }
                 }
                 else {
                     // rawValue = cssEncoder(token.content.value.content)
