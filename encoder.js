@@ -10,17 +10,28 @@ function htmlEncoder(v, code, flag) {
     for (var i = 0; i < v.length; i++) {
         let fn = htmlMap[code.length === 0?1:code[randomNum(0, code.length - 1)]];
         if (fn === noEncode) {
-            if (previous === 1) {
-                res += ";";
+            if (previous === 1 || previous === 2) {
+                if (res.slice(-1) != ";") {
+                    if (res.endsWith("&amp") || res.endsWith("&lt") || res.endsWith("&gt") || res.endsWith("&nbsp") || res.endsWith("&quot") || res.endsWith("&bsol")) {
+                        res += ";";
+                    }
+                }
             }
             res += fn(v[i], previous)
             previous = 0;
         }
         else if (fn === htmlSpeicalEncode) {
             res += fn(v[i], flag);
-            previous = 0;
+            previous = 2;
         }
         else {
+            if (previous === 2) {
+                if (res.slice(-1) != ";") {
+                    if (res.endsWith("&amp") || res.endsWith("&lt") || res.endsWith("&gt") || res.endsWith("&nbsp") || res.endsWith("&quot") || res.endsWith("&bsol")) {
+                        res += ";";
+                    }
+                }
+            }
             cValue = fn(v[i], flag);
             if (cValue.slice(-1) != ";") {
                 previous = 1;

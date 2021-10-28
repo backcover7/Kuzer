@@ -136,10 +136,14 @@ function rebuildJsTokens(v, jcode, jflag) {
 
         let tokenValue = tokens[i].value;
         if (tokens[i].type === "Identifier") {
-            if (jcode.includes(4)) {
-                idJcode = [getMapKeyByValue(jsMap, noEncode), getMapKeyByValue(jsMap, jsunicodeEncode)];
-                tokenValue = jsEncoder(tokenValue, idJcode, jflag);      // unicode
+            var idJcode = [];
+            if (jcode.includes(1)) {
+                idJcode.push(getMapKeyByValue(jsMap, noEncode));
             }
+            else if (jcode.includes(4)) {
+                idJcode.push(getMapKeyByValue(jsMap, jsunicodeEncode));
+            }        
+            tokenValue = jsEncoder(tokenValue, idJcode, jflag);      // unicode
         }
         else if (tokens[i].type === "String") {
             tokenValue= tokenValue.slice(0,1) + jsEncoder(tokenValue.slice(1,-1), jcode, jflag) + tokenValue.slice(-1);
