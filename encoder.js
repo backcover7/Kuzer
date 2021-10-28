@@ -16,6 +16,10 @@ function htmlEncoder(v, code, flag) {
             res += fn(v[i], previous)
             previous = 0;
         }
+        else if (fn == htmlSpeicalEncode) {
+            res += fn(v[i], flag);
+            previous = 0;
+        }
         else {
             cValue = fn(v[i], flag);
             if (cValue.slice(-1) != ";") {
