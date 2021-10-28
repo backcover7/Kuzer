@@ -10,7 +10,7 @@ function rebuildHtmlTokens(token, options = null) {
     /*
     options = [hcode, hflag, ucode, uflag, jcode, jflag]
 
-    hcode: {1: noEncode, 2: html10Encode, 3: html16Encode, others: mixed}
+    hcode: {1: noEncode, 2: html10Encode, 3: html16Encode, 4: htmlSpecialEncode, others: mixed}
     ucode: {1: noEncode, 2: urlencode, others: mixed}
     jcode: {1: noEncode, 2: js8Encode, 3: js16Encode, 4: jsunicodeEncode, 5: jsfuckEncode, others: mixed}
     ccode: (has not been supported yet) {1: noEncode, 2: css16Encode, others: mixed}

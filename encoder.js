@@ -1,4 +1,4 @@
-var htmlMap = {1: noEncode, 2: html10Encode, 3: html16Encode};
+var htmlMap = {1: noEncode, 2: html10Encode, 3: html16Encode, 4: htmlSpeicalEncode};
 var urlMap = {1: noEncode, 2: wholeurlEncode};
 var jsMap = {1: noEncode, 2: js8Encode, 3:js16Encode, 4: jsunicodeEncode, 5: jsfuckEncode};
 var cssMap = {1: noEncode, 2: css16Encode};
@@ -68,7 +68,7 @@ function noEncode(v) {
     return v;
 }
 
-function htmlSpeicalEncode(v) {
+function htmlSpeicalEncode(v, flag = false) {
     let s = ""
     switch(v) {
         case "&":
@@ -86,10 +86,13 @@ function htmlSpeicalEncode(v) {
         case "\"":
             s = "&quot";
             break;
+        case "\\":
+            s = "&bsol";
+            break;
         default:
             return v;
     }
-    s += randomFlag(";", "");
+    s += variant(flag, randomFlag(";", ""), ";");;
     return s;
 }
 

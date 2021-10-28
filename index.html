@@ -64,6 +64,9 @@
                             <tr>
                                 <td id="html3" class="mdl-data-table__cell--non-numeric">HTML16</td>
                             </tr>
+                            <tr>
+                                <td id="html4" class="mdl-data-table__cell--non-numeric">HTMLSpecial</td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -189,7 +192,7 @@
 
         function getOptions() {
             let options = [];
-            options[0] = getSelectedValue(["html1", "html2", "html3"]);
+            options[0] = getSelectedValue(["html1", "html2", "html3", "html4"]);
             options[1] = getById("varianthtml").checked;
             options[2] = getSelectedValue(["url1", "url2"]);
             options[3] = false;  // url encode does not have variant version at present
