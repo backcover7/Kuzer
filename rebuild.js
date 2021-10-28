@@ -36,7 +36,7 @@ function rebuildHtmlTokens(token, options = null) {
 
     let rToken = "";
 
-    if (token.nodeType == "text") {
+    if (token.nodeType === "text") {
         // Must be charRef
         rToken += htmlEncoder(token.content.value.content, hcode, hflag);
     }
@@ -53,7 +53,7 @@ function rebuildHtmlTokens(token, options = null) {
                     if (attrs[i].value != null) {
                         let attrValue = attrs[i].value.content;
 
-                        if (attrs[i].key.content.substring(0, 2).toLowerCase() == "on") {
+                        if (attrs[i].key.content.substring(0, 2).toLowerCase() === "on") {
                             // onEvent attribute
                             attrValue = rebuildJsTokens(attrValue, jcode, jflag);    // The case of onEvent="javascript:url" has been covered
                         }
@@ -61,7 +61,7 @@ function rebuildHtmlTokens(token, options = null) {
                             // value of onEvent would not be decoded by URLdecoder
                             if (isUrl(attrValue)) {
                                 let urlArray = urlParse(attrValue);
-                                if (urlArray[0].toLowerCase() == "javascript:") {
+                                if (urlArray[0].toLowerCase() === "javascript:") {
                                     urlArray[0] = insertFuzzer("javascript", variant(fuzzr[5], randomElem(FuzzArr56), ""));           // [5]
                                     urlArray[0] += variant(fuzzr[6], randomElem(FuzzArr56), "") + ":" + variant(fuzzr[7], randomElem(FuzzArr7), "");    // [6], [7]
                                     urlArray[1] = rebuildJsTokens(urlArray[1], jcode, jflag);
@@ -86,7 +86,7 @@ function rebuildHtmlTokens(token, options = null) {
             if (["script", "style"].includes(token.nodeType)) {
                 // raw text element
                 let rawValue = "";
-                if (token.nodeType == "script") {
+                if (token.nodeType === "script") {
                     if (token.content.value != null) {
                         rawValue = rebuildJsTokens(token.content.value.content, jcode, jflag);
                     }
@@ -135,13 +135,13 @@ function rebuildJsTokens(v, jcode, jflag) {
         length = tokens[i].range[1];
 
         let tokenValue = tokens[i].value;
-        if (tokens[i].type == "Identifier") {
+        if (tokens[i].type === "Identifier") {
             if (jcode.includes(4)) {
                 idJcode = [getMapKeyByValue(jsMap, noEncode), getMapKeyByValue(jsMap, jsunicodeEncode)];
                 tokenValue = jsEncoder(tokenValue, idJcode, jflag);      // unicode
             }
         }
-        else if (tokens[i].type == "String") {
+        else if (tokens[i].type === "String") {
             tokenValue= tokenValue.slice(0,1) + jsEncoder(tokenValue.slice(1,-1), jcode, jflag) + tokenValue.slice(-1);
         }
         rToken += tokenValue;
@@ -151,7 +151,7 @@ function rebuildJsTokens(v, jcode, jflag) {
 
 function isParentTokenType(currentToken, targetType) {
     if (currentToken.parentRef != null) {
-        if (currentToken.parentRef.content.name == targetType) {
+        if (currentToken.parentRef.content.name === targetType) {
             return true;
         }
         return isParentTokenType(currentToken.parentRef, targetType);

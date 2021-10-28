@@ -8,15 +8,15 @@ function htmlEncoder(v, code, flag) {
     let res = "";
     let previous = 0;   // set 1 when using variant html10Encode or variant html16Encode without ";"
     for (var i = 0; i < v.length; i++) {
-        let fn = htmlMap[code.length == 0?1:code[randomNum(0, code.length - 1)]];
-        if (fn == noEncode) {
+        let fn = htmlMap[code.length === 0?1:code[randomNum(0, code.length - 1)]];
+        if (fn === noEncode) {
             if (previous === 1) {
                 res += ";";
             }
             res += fn(v[i], previous)
             previous = 0;
         }
-        else if (fn == htmlSpeicalEncode) {
+        else if (fn === htmlSpeicalEncode) {
             res += fn(v[i], flag);
             previous = 0;
         }
@@ -38,11 +38,11 @@ function jsEncoder(v, code, flag) {
     let res = "";
     let fn;
     for (var i = 0; i < v.length; i++) {
-        fn = jsMap[code.length == 0?1:code[randomNum(0, code.length - 1)]];
+        fn = jsMap[code.length === 0?1:code[randomNum(0, code.length - 1)]];
         res += fn(v[i], flag);
     }
 
-    if (fn == jsfuckEncode || code == 4) {
+    if (fn === jsfuckEncode || code === 4) {
         // Delete "+" character in the last position.
         res.slice(0, -1);
     }
@@ -53,7 +53,7 @@ function jsEncoder(v, code, flag) {
 function urlcomponentEncoder(v, code, flag) {
     let res = "";
     for (var i = 0; i < v.length; i++) {
-        fn = urlMap[code.length == 0?1:code[randomNum(0, code.length - 1)]];
+        fn = urlMap[code.length === 0?1:code[randomNum(0, code.length - 1)]];
         res += fn(v[i], flag);
     }
     return res;
@@ -62,7 +62,7 @@ function urlcomponentEncoder(v, code, flag) {
 function cssEncoder(v, code, flag) {
     let res = "";
     for (var i = 0; i < v.length; i++) {
-        fn = cssMap[code.length == 0?1:code[randomNum(0, code.length - 1)]];
+        fn = cssMap[code.length === 0?1:code[randomNum(0, code.length - 1)]];
         res += fn(v[i], flag);
     }
     return res;
