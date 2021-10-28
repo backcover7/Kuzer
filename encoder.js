@@ -9,12 +9,17 @@ function htmlEncoder(v, code, flag) {
     let previous = 0;   // set 1 when using variant html10Encode or variant html16Encode without ";"
     for (var i = 0; i < v.length; i++) {
         let fn = htmlMap[code.length === 0?1:code[randomNum(0, code.length - 1)]];
+        if (previous === 2) {
+            if (res.slice(-1) != ";") {
+                if (res.endsWith("&amp") || res.endsWith("&lt") || res.endsWith("&gt") || res.endsWith("&nbsp") || res.endsWith("&quot") || res.endsWith("&bsol")) {
+                    res += ";";
+                }
+            }
+        }
         if (fn === noEncode) {
-            if (previous === 1 || previous === 2) {
+            if (previous === 1) {
                 if (res.slice(-1) != ";") {
-                    if (res.endsWith("&amp") || res.endsWith("&lt") || res.endsWith("&gt") || res.endsWith("&nbsp") || res.endsWith("&quot") || res.endsWith("&bsol")) {
-                        res += ";";
-                    }
+                    res += ";";
                 }
             }
             res += fn(v[i], previous)
@@ -25,13 +30,6 @@ function htmlEncoder(v, code, flag) {
             previous = 2;
         }
         else {
-            if (previous === 2) {
-                if (res.slice(-1) != ";") {
-                    if (res.endsWith("&amp") || res.endsWith("&lt") || res.endsWith("&gt") || res.endsWith("&nbsp") || res.endsWith("&quot") || res.endsWith("&bsol")) {
-                        res += ";";
-                    }
-                }
-            }
             cValue = fn(v[i], flag);
             if (cValue.slice(-1) != ";") {
                 previous = 1;
